@@ -1,3 +1,3 @@
-# BrickMMO Ev3 Hub
+# BrickMMO Hubs
 
-The Python app to control a BrickMMO EV3 Hub.
+The Python apps to control BrickMMO hubs.
