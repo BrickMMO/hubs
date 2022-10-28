@@ -44,7 +44,7 @@ def saySomething(say, voice=False):
         setVoice(voice)
 
     ev3.speaker.say(say)
-    print('-------------------')
+    print('----------')
     print(say)
 
 # A function to set the current voice settings
@@ -164,21 +164,23 @@ brain_ports = json.loads(res.text)["data"]["brain"]["brain_ports"]
 
 print("Hub: ")
 print(hub)
-print('-------------------')
+print('----------')
 print("Ports: ",len(hub_ports))
 print(hub_ports)
-print('-------------------')
+print('----------')
 print("Brain: ")
 print(brain)
-print('-------------------')
+print('----------')
 print("Brain Ports: ",len(brain_ports))
 print(brain_ports)
-print('-------------------')
+print('----------')
 
 setup = [0] * len(hub_ports)
+track = [0] * len(hub_ports)
 
 for i in range(0, len(hub_ports)):
 
+    # Initialize lights
     if brain_ports[i]["hub_function_id"] == 1:
 
         if hub_ports[i]["title"] == 'A':
@@ -194,8 +196,37 @@ for i in range(0, len(hub_ports)):
         wait(100)
         setup[i].stop()
 
-    # elif brain_ports[i]["hub_function_id"] == 2:
+    # Initialize Weasley’s Hat
+    elif brain_ports[i]["hub_function_id"] == 2:
 
+        print("Disabled motor")
+
+        '''
+        if hub_ports[i]["title"] == 'A':
+            setup[i] = Motor(Port.A)
+        if hub_ports[i]["title"] == 'B':
+            setup[i] = Motor(Port.B)
+        if hub_ports[i]["title"] == 'C':
+            setup[i] = Motor(Port.C)
+        if hub_ports[i]["title"] == 'D':
+            setup[i] = Motor(Port.D)
+        '''
+
+    # Initialize Dagobah Swamp
+    elif brain_ports[i]["hub_function_id"] == 3:
+
+        if hub_ports[i]["title"] == 'A':
+            setup[i] = DCMotor(Port.A)
+        if hub_ports[i]["title"] == 'B':
+            setup[i] = DCMotor(Port.B)
+        if hub_ports[i]["title"] == 'C':
+            setup[i] = DCMotor(Port.C)
+        if hub_ports[i]["title"] == 'D':
+            setup[i] = DCMotor(Port.D)
+
+        setup[i].dc(100)
+        wait(100)
+        setup[i].stop()
 
 '''
 Set base variables
@@ -207,7 +238,7 @@ Set base variables
 Create main loop
 '''
 
-counter = 50
+counter = 101
 
 while True:
     
@@ -220,77 +251,47 @@ while True:
         brain = json.loads(res.text)["data"]["brain"]
         brain_ports = json.loads(res.text)["data"]["brain"]["brain_ports"]
 
-        for i in range(0, len(hub_ports)):
-
-            if brain_ports[i]["hub_function_id"] == 1:
-
-                settings = json.loads(brain_ports[i]['settings'])
-                
-                if settings["status"] == "on":
-
-                    setup[i].dc(100)
-            
-                else: 
-                    
-                    setup[i].stop()
-        
-
-        '''
-        for port in ports:
-
-            # print(port)
-            # print(port["hub_function_id"])
-
-            if port["hub_function_id"] != None:
-
-                settings = json.loads(port["settings"])
-                
-                print(settings)
-        ''' 
-
-        '''
-        # Flicker lights
-        if settings["flicker"] == "On" and flickerStatus == False:
-
-            flickerStatus = True
-            # ev3.speaker.play_file(SoundFile.CONFIRM)
-            audioQueue.append(["play",SoundFile.CONFIRM])
-
-        elif settings["flicker"] == "Off" and flickerStatus == True:
-
-            flickerStatus = False
-            # ev3.speaker.play_file(SoundFile.GENERAL_ALERT)
-            audioQueue.append(["play",SoundFile.GENERAL_ALERT])
-
-        # Steady lights
-        if settings["steady"] == "On" and steadyStatus == False:
-
-            steadyStatus = True
-            # ev3.speaker.play_file(SoundFile.CONFIRM)
-            audioQueue.append(["play",SoundFile.CONFIRM])
-            motorC.dc(50)
-
-        elif settings["steady"] == "Off" and steadyStatus == True:
-
-            steadyStatus = False
-            # ev3.speaker.play_file(SoundFile.GENERAL_ALERT)
-            audioQueue.append(["play",SoundFile.GENERAL_ALERT])
-            motorC.dc(0)
-
-        # Cloning
-        # Steady lights
-        if settings["cloning"] == "On" and cloningStatus == False:
-
-            cloningStatus = True
-            motorA.dc(30)
-
-        elif settings["cloning"] == "Off" and cloningStatus == True:
-
-            cloningStatus = False
-            motorA.dc(0)
-        '''
-
         counter = 0
+
+    for i in range(0, len(hub_ports)):
+
+        if brain_ports[i]["hub_function_id"] == 1:
+
+            settings = json.loads(brain_ports[i]['settings'])
+            
+            if settings["status"] == "on":
+
+                setup[i].dc(100)
+        
+            else: 
+                
+                setup[i].stop()
+
+        elif brain_ports[i]["hub_function_id"] == 2:
+
+            settings = json.loads(brain_ports[i]['settings'])
+            
+            '''
+            if settings["status"] == "on":
+
+                setup[i].stop()
+        
+            else: 
+                
+                setup[i].stop()
+            '''
+
+        elif brain_ports[i]["hub_function_id"] == 3:
+
+            settings = json.loads(brain_ports[i]['settings'])
+            
+            if settings["status"] == "on":
+
+                setup[i].dc(random.randint(20, 100))
+        
+            else: 
+                
+                setup[i].stop()
 
     counter += 1
 
