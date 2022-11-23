@@ -33,7 +33,7 @@ touch = TouchSensor(Port.S1)
 ev3.light.on(Color.RED)
 
 # Set button vairble
-touchButton = "Off"`
+touchButton = "Off"
 
 # Create a loop to react to buttons
 while True:
