@@ -8,6 +8,8 @@ from pybricks.robotics import DriveBase
 from pybricks.media.ev3dev import SoundFile, ImageFile
 from pybricks.iodevices import DCMotor
 
+import urequests as requests
+import json
 
 # This program requires LEGO EV3 MicroPython v2.0 or higher.
 # Click "Open user guide" on the EV3 extension tab for more information.
@@ -48,8 +50,22 @@ while True:
         touchButton = "Off"
         break
 
-    # If the touch sensor is pressed
-    if touch.pressed() is True and touchButton == "Off":
+    # Make an API call to the brain settings
+    # Online URL
+    # res = requests.get(url='http://console.brickmmo.com/api/brain/1')
+    # Localhost URL
+    res = requests.get(url='http://192.168.1.10:8888/api/brain?key=OSCAR')
+
+    data = json.loads(res.text)
+
+    status = json.loads(data['data']['brain']['brain_ports'][0]['settings'])['status']
+
+    print(status)
+
+    
+    
+    # If status is on
+    if status is "on":
 
         motorA.dc(100)
         motorB.dc(100)
@@ -57,8 +73,8 @@ while True:
         ev3.light.on(Color.GREEN)
         touchButton = "On"
 
-    # If the touch sensor is released
-    elif touch.pressed() is False and touchButton == "On":
+    # If status is off
+    else:
 
         motorA.stop()
         motorB.stop()
@@ -66,7 +82,7 @@ while True:
         ev3.light.on(Color.RED)
         touchButton = "Off"
 
-    wait(20)
+    wait(5000)
 
 # Use the speech tool to signify the program has finished
 ev3.speaker.say("Program complete")
