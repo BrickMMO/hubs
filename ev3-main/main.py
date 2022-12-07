@@ -155,7 +155,11 @@ voicePitch = 50
 # ev3.speaker.say("Garage initilized")
 # saySomething("Garage initilized")
 
-res = requests.get(url='http://console.brickmmo.com/api/brain/1')
+# Make an API call to the brain settings
+# Online URL
+# res = requests.get(url='http://console.brickmmo.com/api/brain?key=OSCAR')
+# Localhost URL
+res = requests.get(url='http://192.168.1.10:8888/api/brain?key=OSCAR')
 
 hub = json.loads(res.text)["data"]["hub"]
 hub_ports = json.loads(res.text)["data"]["hub"]["hub_ports"]
@@ -244,7 +248,11 @@ while True:
     
     if counter > 100:
 
-        res = requests.get(url='http://console.brickmmo.com/api/brain/1')
+        # Make an API call to the brain settings
+        # Online URL
+        # res = requests.get(url='http://console.brickmmo.com/api/brain?key=OSCAR')
+        # Localhost URL
+        res = requests.get(url='http://192.168.1.10:8888/api/brain?key=OSCAR')
 
         hub = json.loads(res.text)["data"]["hub"]
         hub_ports = json.loads(res.text)["data"]["hub"]["hub_ports"]
@@ -255,6 +263,9 @@ while True:
 
     for i in range(0, len(hub_ports)):
 
+        print(brain_ports[i]["hub_function_id"])
+
+        # Lights
         if brain_ports[i]["hub_function_id"] == 1:
 
             settings = json.loads(brain_ports[i]['settings'])
@@ -267,6 +278,7 @@ while True:
                 
                 setup[i].stop()
 
+        # Weasley
         elif brain_ports[i]["hub_function_id"] == 2:
 
             settings = json.loads(brain_ports[i]['settings'])
@@ -281,10 +293,12 @@ while True:
                 setup[i].stop()
             '''
 
+        # Swamp
         elif brain_ports[i]["hub_function_id"] == 3:
 
             settings = json.loads(brain_ports[i]['settings'])
             
+            '''
             if settings["status"] == "on":
 
                 setup[i].dc(random.randint(20, 100))
@@ -292,6 +306,7 @@ while True:
             else: 
                 
                 setup[i].stop()
+            '''
 
     counter += 1
 
