@@ -55,15 +55,13 @@ while True:
     # Online URL
     # res = requests.get(url='http://console.brickmmo.com/api/brain?key=OSCAR')
     # Localhost URL
-    res = requests.get(url='http://192.168.1.10:8888/api/brain?key=OSCAR')
+    res = requests.get(url='http://192.168.1.8:8888/api/brain?key=OSCAR')
 
     data = json.loads(res.text)
 
-    status = json.loads(data['data']['brain']['brain_ports'][0]['settings'])['status']
+    status = data['data']['brain']['brain_ports'][0]['settings']['status']
 
-    print(status)
-
-    
+    print(status)    
     
     # If status is on
     if status is "on":
