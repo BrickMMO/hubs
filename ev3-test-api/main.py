@@ -53,9 +53,9 @@ while True:
     
     # Make an API call to the brain settings
     # Online URL
-    # res = requests.get(url='http://console.brickmmo.com/api/brain?key=OSCAR')
+    res = requests.get(url='http://console.brickmmo.com/api/brain?key=OSCAR')
     # Localhost URL
-    res = requests.get(url='http://192.168.1.10:8888/api/brain?key=OSCAR')
+    # res = requests.get(url='http://192.168.1.10:8888/api/brain?key=OSCAR')
 
     data = json.loads(res.text)
 
