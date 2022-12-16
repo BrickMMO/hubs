@@ -159,7 +159,7 @@ voicePitch = 50
 # Online URL
 # res = requests.get(url='http://console.brickmmo.com/api/brain?key=OSCAR')
 # Localhost URL
-res = requests.get(url='http://192.168.1.10:8888/api/brain?key=OSCAR')
+res = requests.get(url='http://10.12.1.105:8888/api/brain?key=PAPA')
 
 hub = json.loads(res.text)["data"]["hub"]
 hub_ports = json.loads(res.text)["data"]["hub"]["hub_ports"]
@@ -232,6 +232,18 @@ for i in range(0, len(hub_ports)):
         wait(100)
         setup[i].stop()
 
+    # Initialize Dagobah Swamp
+    elif brain_ports[i]["hub_function_id"] == 5:
+
+        if hub_ports[i]["title"] == 'A':
+            setup[i] = Motor(Port.A)
+        if hub_ports[i]["title"] == 'B':
+            setup[i] = Motor(Port.B)
+        if hub_ports[i]["title"] == 'C':
+            setup[i] = Motor(Port.C)
+        if hub_ports[i]["title"] == 'D':
+            setup[i] = Motor(Port.D)
+
 '''
 Set base variables
 '''
@@ -252,7 +264,7 @@ while True:
         # Online URL
         # res = requests.get(url='http://console.brickmmo.com/api/brain?key=OSCAR')
         # Localhost URL
-        res = requests.get(url='http://192.168.1.10:8888/api/brain?key=OSCAR')
+        res = requests.get(url='http://10.12.1.105:8888/api/brain?key=PAPA')
 
         hub = json.loads(res.text)["data"]["hub"]
         hub_ports = json.loads(res.text)["data"]["hub"]["hub_ports"]
@@ -261,9 +273,9 @@ while True:
 
         counter = 0
 
-    for i in range(0, len(hub_ports)):
+        print("API Consulted!")
 
-        print(brain_ports[i]["hub_function_id"])
+    for i in range(0, len(hub_ports)):
 
         # Lights
         if brain_ports[i]["hub_function_id"] == 1:
@@ -307,6 +319,29 @@ while True:
                 
                 setup[i].stop()
             '''
+ 
+        # Christmas
+        elif brain_ports[i]["hub_function_id"] == 5:
+
+            settings = brain_ports[i]['settings']
+            
+            # Minimum speed for small EV3 motor is 17
+
+            if settings["status"] == "on" and settings["direction"] == "cw":
+
+                setup[i].run(-60)
+                print("Setting Christmas Tree speed CW")
+        
+            elif settings["status"] == "on" and settings["direction"] == "ccw":
+                
+                setup[i].run(60)
+                print("Setting Christmas Tree speed CCW")
+
+            else:
+
+                setup[i].stop()
+                print("Christmas Tree is off")
+            
 
     counter += 1
 
