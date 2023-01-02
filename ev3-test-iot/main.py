@@ -27,7 +27,8 @@ ev3.light.off()
 motorA = Motor(Port.A)
 motorB = Motor(Port.B)
 lights = DCMotor(Port.C)
-touch = TouchSensor(Port.S1)
+# touch = TouchSensor(Port.S1)
+color = ColorSensor(Port.S1)
 
 # Initialize lights
 ev3.light.on(Color.RED)
@@ -48,6 +49,12 @@ while True:
         touchButton = "Off"
         break
 
+    print(color.color())
+    print(color.ambient())
+    print(color.reflection())
+
+
+    '''
     # If the touch sensor is pressed
     if touch.pressed() is True and touchButton == "Off":
 
@@ -65,8 +72,11 @@ while True:
         lights.dc(0)
         ev3.light.on(Color.RED)
         touchButton = "Off"
+    '''
 
-    wait(20)
+
+
+    wait(500)
 
 # Use the speech tool to signify the program has finished
 ev3.speaker.say("Program complete")

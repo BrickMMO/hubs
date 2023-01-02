@@ -29,7 +29,8 @@ ev3.light.off()
 motorA = Motor(Port.A)
 motorB = Motor(Port.B)
 lights = DCMotor(Port.C)
-touch = TouchSensor(Port.S1)
+# touch = TouchSensor(Port.S1)
+color = ColorSensor(Port.S1)
 
 # Initialize lights
 ev3.light.on(Color.RED)
@@ -49,22 +50,32 @@ while True:
         ev3.light.off()
         touchButton = "Off"
         break
-
     
     # Make an API call to the brain settings
     # Online URL
-    # res = requests.get(url='http://console.brickmmo.com/api/brain?key=OSCAR')
+    res = requests.get(url='http://console.brickmmo.com/api/brain?key=OSCAR')
     # Localhost URL
-    res = requests.get(url='http://192.168.1.10:8888/api/brain?key=OSCAR')
+    # res = requests.get(url='http://192.168.1.8:8888/api/brain?key=OSCAR')
+
 
     data = json.loads(res.text)
 
-    status = json.loads(data['data']['brain']['brain_ports'][0]['settings'])['status']
+    status = data['data']['brain']['brain_ports'][4]['settings']['status']
+    portId = data['data']['brain']['brain_ports'][4]['id']
 
-    print(status)
+    # If status is on
+    if status == "on":
 
+        settings = "{\"status\":\"on\",\"color\":\""+str(color.color())+"\",\"ambient\":\""+str(color.ambient())+"\",\"reflection\":\""+str(color.reflection())+"\"}"
     
-    
+        # Make an API call to the brain settings
+        # Online URL
+        res = requests.get(url='http://console.brickmmo.com/api/port/'+str(portId)+'/settings/'+settings+'?key=OSCAR')
+        # Localhost URL
+        # requests.get(url='http://192.168.1.8/api/port/settings/'+settings+'?key=OSCAR')
+                
+
+    '''
     # If status is on
     if status is "on":
 
@@ -82,6 +93,7 @@ while True:
         lights.dc(0)
         ev3.light.on(Color.RED)
         touchButton = "Off"
+    '''
 
     wait(5000)
 
