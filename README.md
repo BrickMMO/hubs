@@ -1,8 +1,10 @@
 # BrickMMO Hubs
 
-The Python apps to control BrickMMO hubs.
+A collection of Python apps to control LEGO® EV3® and Spike® hubs for the BrickMMO Smart City.
 
-## Requirements:
+***
+
+## Repo Resources
 
 * [BrickMMO](https://brickmmo.com/)
 * [LEGO™ Mindstorms™](https://www.lego.com/en-ca/categories/coding-for-kids)
